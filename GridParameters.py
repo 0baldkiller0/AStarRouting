@@ -92,7 +92,7 @@ class GridParameters:
                 layers_[i] = layer.name
             i += 1
 
-        net_list = []
+        net_list = [] #each net just contain num and name?????
         for net in board.nets:
             # parse net_class class
             if net.name != '':
@@ -103,7 +103,9 @@ class GridParameters:
                 net_list.append(board_net)
         # net_list.pop(0)
         self.pad_obstacles = []
+        self.footprint_list = []
         for footprint in board.footprints:
+            self.footprint_list.append(footprint)
             for pad in footprint.pads:
                 if footprint.position.angle is None:
                     theta = 0
