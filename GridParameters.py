@@ -8,12 +8,15 @@ from kiutils_pro import KiCadPro
 
 class Pad:
     def __init__(self, pos, layer, shape, size, pad_type, net_id):
-        self.position = pos
+        self.position_real = pos
         self.layer = layer
         self.shape = shape
-        self.size = size
+        self.size_real = size
         self.type = pad_type
         self.netID = net_id
+
+        self.position = [to_grid_coord_round_down(pos[0]), to_grid_coord_round_down(pos[1]), pos[2]]
+        self.size = [to_grid_coord_round_up(size[0]), to_grid_coord_round_up(size[1])]
 
 
 class Net:
@@ -115,8 +118,8 @@ class GridParameters:
                 dy = pad.position.Y * math.cos(theta) - pad.position.X * math.sin(theta)
                 x = footprint.position.X + dx
                 y = footprint.position.Y + dy
-                pad_pos = [to_grid_coord_round_down(x - self.dia_pos_0[0]),
-                           to_grid_coord_round_down(y - self.dia_pos_0[1]),
+                pad_pos = [x - self.dia_pos_0[0], 
+                           y - self.dia_pos_0[1],
                            layers[footprint.layer]]
                 if pad.position.angle is None:
                     alpha = 0
@@ -124,7 +127,7 @@ class GridParameters:
                     alpha = pad.position.angle * math.pi / 180
                 size_x = pad.size.X * math.cos(alpha) + pad.size.Y * math.sin(alpha)
                 size_y = pad.size.Y * math.cos(alpha) - pad.size.X * math.sin(alpha)
-                pad_size = [to_grid_coord_round_up(abs(size_x)), to_grid_coord_round_up(abs(size_y))]
+                pad_size = [abs(size_x), abs(size_y)]
                 pad_shape = pad.shape
                 if pad.net:
                     board_pad = Pad(pad_pos, footprint.layer, pad_shape, pad_size, pad.type, pad.net.number)
