@@ -70,15 +70,28 @@ class BusAllocator:
                             BusWidth_temp += self.clearance + self.trackwidth
                             count +=1
             if count >= 2:
-                start_x = 
-                start_y =
-                end_x = 
-                end_y = 
-                Bus_start = 
-                Bus_end =
-                BusWidth = 
-                BusID = 
+                start_sum_x = 0
+                start_sum_y = 0
+                end_sum_x = 0
+                end_sum_y = 0
+                for pin in StartBusPins_temp:
+                    start_sum_x += pin.position.X
+                    start_sum_y += pin.position.Y
+
+                Bus_start_x = start_sum_x/len(StartBusPins_temp)
+                Bus_start_y = start_sum_y/len(StartBusPins_temp)
+                for pin in EndBusPins_temp:
+
+                    end_sum_x += pin.position.X
+                    end_sum_y += pin.position.Y
+
+                Bus_end_x = end_sum_x/len(EndBusPins_temp)
+                Bus_end_y = end_sum_y/len(EndBusPins_temp) 
+                Bus_start = (Bus_start_x,Bus_start_y)
+                Bus_end = (Bus_end_x, Bus_end_y)
+                BusWidth = BusWidth_temp 
                 self.BusList.append((BusID, Bus_start, Bus_end, BusWidth))
+                BusID +=1
 
                     
                 
